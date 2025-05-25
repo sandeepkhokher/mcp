@@ -1,0 +1,42 @@
+{
+  "name": "claude-linux",
+  "version": "1.0.0",
+  "description": "Claude AI Electron Wrapper for Linux with MCP Support",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "build": "electron-builder",
+    "postinstall": "npm install -g @modelcontextprotocol/server-filesystem"
+  },
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "electron": "^30.0.0",
+    "electron-builder": "^24.9.1"
+  },
+  "dependencies": {
+    "electron-store": "^8.2.0"
+  },
+  "build": {
+    "appId": "com.unofficial.claude",
+    "productName": "Claude",
+    "linux": {
+      "target": [
+        "AppImage",
+        "deb"
+      ],
+      "category": "Utility",
+      "icon": "build/icon.png"
+    },
+    "extraFiles": [
+      {
+        "from": "mcp_config_editor.html",
+        "to": "mcp_config_editor.html"
+      },
+      {
+        "from": "setup_mcp.js",
+        "to": "setup_mcp.js"
+      }
+    ]
+  }
+}

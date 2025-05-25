@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Claude MCP Configuration</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f7;
+            color: #333;
+            line-height: 1.5;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 10px;
+        }
+
+        .tabs {
+            display: flex;
+            margin-bottom: 20px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .tab {
+            padding: 10px 20px;
+            cursor: pointer;
+            margin-right: 10px;
+            border-radius: 4px 4px 0 0;
+        }
+
+        .tab.active {
+            background-color: #5E35B1;
+            color: white;
+        }
+
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            font-size: 24px;
+            font-weight: 500;
+            margin: 0;
+        }
+
+        h2 {
+            font-size: 18px;
+            font-weight: 500;
+            margin-top: 0;
+            margin-bottom: 15px;
+        }
+
+        .editor {
+            margin-top: 20px;
+        }
+
+        .editor-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        #configEditor {
+            width: 100%;
+            height: 300px;
+            font-family: monospace;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            background-color: #1e1e1e;
+            color: #d4d4d4;
+            margin-bottom: 15px;
+            resize: vertical;
+        }
+
+        .btn {
+            background-color: #5E35B1;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .btn:hover {
+            background-color: #4527A0;
+        }
+
+        .btn.secondary {
+            background-color: #757575;
+        }
+
+        .btn.secondary:hover {
+            background-color: #616161;
+        }
+
+        .btn-group {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+        }
+
+        .info-box {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #e8f5e9;
+            border-radius: 4px;
+            border-left: 4px solid #43a047;
+        }
+
+        .warning-box {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #fff8e1;
+            border-radius: 4px;
+            border-left: 4px solid #ffb300;
+        }
+
+        code {
+            background-color: #f5f5f5;
+            padding: 2px 4px;
+            border-radius: 3px;
+            font-family: monospace;
+        }
+
+        pre {
+            background-color: #1e1e1e;
+            color: #d4d4d4;
+            padding: 15px;
+            border-radius: 4px;
+            overflow: auto;
+            font-family: monospace;
+        }
+
+        .copy-btn {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            background-color: #424242;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+
+        .copy-btn:hover {
+            background-color: #616161;
+        }
+
+        .code-container {
+            position: relative;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Claude MCP Configuration</h1>
+        </div>
+
+        <div class="tabs">
+            <div class="tab active" id="tabMacLinux">MacOS/Linux</div>
+            <div class="tab" id="tabWindows">Windows</div>
+        </div>
+
+        <div class="content">
+            <h2>Configure Model Context Protocol (MCP) Servers</h2>
+            <p>
+                MCP is a protocol that enables secure connections between clients, such as the Claude app, and local
+                services.
+                This configuration file tells Claude which MCP servers to start when the application launches.
+            </p>
+
+            <div class="editor">
+                <div class="editor-header">
+                    <div>Edit Configuration</div>
+                    <div>
+                        <button id="btnReset" class="btn secondary">Reset to Default</button>
+                    </div>
+                </div>
+                <div class="code-container">
+                    <pre id="configEditor" contenteditable="true">{
+  "mcpServers": {
+    "filesystem": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-filesystem",
+        "/home/tron/Desktop",
+        "/home/tron/Downloads"
+      ]
+    }
+  }
+}</pre>
+                    <button class="copy-btn" id="btnCopy">📋</button>
+                </div>
+                <div class="btn-group">
+                    <button id="btnSave" class="btn">Save Configuration</button>
+                </div>
+            </div>
+
+            <div class="info-box">
+                <h3>How does the configuration file work?</h3>
+                <p>
+                    This configuration file tells Claude which MCP servers to start up every time you start the
+                    application.
+                    In this case, we have added one server called "filesystem" that will use the Node <code>npx</code>
+                    command to install and run
+                    <code>@modelcontextprotocol/server-filesystem</code>. This server will let you access your file
+                    system in Claude.
+                </p>
+                <p>
+                    Make sure to replace any paths with valid directories that you want Claude to be able to access and
+                    modify.
+                    It's set up to work for Desktop and Downloads, but you can add more paths as well.
+                </p>
+            </div>
+
+            <div class="warning-box">
+                <h3>Command Privileges</h3>
+                <p>
+                    Claude will run the commands in the configuration file with the permissions of your user account,
+                    and access your local files.
+                    Only add commands if you understand and trust the source.
+                </p>
+            </div>
+
+            <h3>Next Steps</h3>
+            <p>After updating your configuration file, you need to restart Claude for the changes to take effect.</p>
+            <p>Upon restarting, you should see a slider ≡ icon in the bottom left corner of the input box.</p>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const configEditor = document.getElementById('configEditor');
+            const btnSave = document.getElementById('btnSave');
+            const btnReset = document.getElementById('btnReset');
+            const btnCopy = document.getElementById('btnCopy');
+            const tabMacLinux = document.getElementById('tabMacLinux');
+            const tabWindows = document.getElementById('tabWindows');
+
+            // Default configurations
+            const defaultLinuxConfig = {
+                mcpServers: {
+                    filesystem: {
+                        command: "npx",
+                        args: [
+                            "-y",
+                            "@modelcontextprotocol/server-filesystem",
+                            "/home/tron/Desktop",
+                            "/home/tron/Downloads"
+                        ]
+                    }
+                }
+            };
+
+            const defaultWindowsConfig = {
+                mcpServers: {
+                    filesystem: {
+                        command: "npx",
+                        args: [
+                            "-y",
+                            "@modelcontextprotocol/server-filesystem",
+                            "C:\\Users\\tron\\Desktop",
+                            "C:\\Users\\tron\\Downloads"
+                        ]
+                    }
+                }
+            };
+
+            // Set initial config
+            let currentConfig = defaultLinuxConfig;
+            configEditor.textContent = JSON.stringify(currentConfig, null, 2);
+
+            // Load saved config if available
+            try {
+                const savedConfig = localStorage.getItem('claude_mcp_config');
+                if (savedConfig) {
+                    currentConfig = JSON.parse(savedConfig);
+                    configEditor.textContent = JSON.stringify(currentConfig, null, 2);
+                }
+            } catch (e) {
+                console.error('Failed to load saved config:', e);
+            }
+
+            // Tab switching
+            tabMacLinux.addEventListener('click', function () {
+                tabMacLinux.classList.add('active');
+                tabWindows.classList.remove('active');
+                currentConfig = defaultLinuxConfig;
+                configEditor.textContent = JSON.stringify(currentConfig, null, 2);
+            });
+
+            tabWindows.addEventListener('click', function () {
+                tabWindows.classList.add('active');
+                tabMacLinux.classList.remove('active');
+                currentConfig = defaultWindowsConfig;
+                configEditor.textContent = JSON.stringify(currentConfig, null, 2);
+            });
+
+            // Save button
+            btnSave.addEventListener('click', function () {
+                try {
+                    const configText = configEditor.textContent;
+                    const config = JSON.parse(configText);
+
+                    // Save to localStorage
+                    localStorage.setItem('claude_mcp_config', JSON.stringify(config));
+
+                    // Send to main process
+                    if (window.electron && window.electron.ipcRenderer) {
+                        window.electron.ipcRenderer.send('save-mcp-config', config);
+                    }
+
+                    alert('Configuration saved successfully!');
+                } catch (e) {
+                    alert('Error: Invalid JSON format. Please check your configuration.');
+                    console.error('Invalid JSON:', e);
+                }
+            });
+
+            // Reset button
+            btnReset.addEventListener('click', function () {
+                const isWindows = tabWindows.classList.contains('active');
+                currentConfig = isWindows ? defaultWindowsConfig : defaultLinuxConfig;
+                configEditor.textContent = JSON.stringify(currentConfig, null, 2);
+            });
+
+            // Copy button
+            btnCopy.addEventListener('click', function () {
+                navigator.clipboard.writeText(configEditor.textContent)
+                    .then(() => {
+                        const originalText = btnCopy.textContent;
+                        btnCopy.textContent = '✓';
+                        setTimeout(() => {
+                            btnCopy.textContent = originalText;
+                        }, 2000);
+                    })
+                    .catch(err => {
+                        console.error('Failed to copy:', err);
+                    });
+            });
+        });
+    </script>
+</body>
+
+</html>
